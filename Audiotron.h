@@ -1,38 +1,15 @@
 #ifndef AUDIOTRON_H
 #define AUDIOTRON_H
 
-#include <vector>
+#include "AudiotronBase.h"
 
 namespace Audiotron {
-
-    const float minimumAudibility = 0.001f;
-
 
     using std::vector;
 
     class Wave;
     class Instrument;
     class Note;
-    class Envelope;
-
-    class Sampler;
-    class SampleBuffer;
-
-    class Sampler {
-    public:
-        Sampler(unsigned);
-        ~Sampler() {}
-
-        unsigned getSamples(float duration) const { return (unsigned) (duration / 1000.0f * frequency); }
-        float    getMillis(unsigned samples) const { return (float)samples / (float)frequency * 1000.0f; }
-        unsigned getFrequency() const { return frequency; }
-
-    private:
-        unsigned frequency;
-    };
-
-    SampleBuffer mixBuffers(vector<SampleBuffer>);
-
 
     class Wave {
     public:
@@ -51,9 +28,6 @@ namespace Audiotron {
         float    amplitude;
 
         float sampleWave(float);
-    };
-
-    class Envelope {
     };
 
     class NoteEnvelope : public Envelope {
@@ -134,38 +108,6 @@ namespace Audiotron {
         Envelope envelope;
     };
 
-    class SampleBuffer {
-    public:
-        SampleBuffer(unsigned);
-        SampleBuffer(unsigned, unsigned);
-        SampleBuffer(Sampler, float);
-        SampleBuffer(Sampler, float, float);
-        ~SampleBuffer() {}
-
-        void setStart(unsigned _start) { start = _start;  }
-        void setStart(Sampler sampler, float _start) { start = sampler.getSamples(_start); }
-        unsigned getStart () const { return start;               }
-        unsigned getEnd   () const { return start + getLength(); }
-        unsigned getLength() const { return samples.size();      }
-
-        void resize(unsigned size) { samples.resize(size, 0.0); }
-
-        vector<float>::reference       operator[](unsigned i)       { return samples[i]; }
-        vector<float>::const_reference operator[](unsigned i) const { return samples[i]; }
-
-        void scaleAmplitude(float);
-        void normalize();
-
-        void apply(Envelope);
-
-        void mixInto(SampleBuffer&);
-
-    private:
-        unsigned start;
-        vector<float> samples;
-    };
-
-   
 
 } // namespace Audiotron
 
