@@ -55,6 +55,9 @@ namespace Audiotron {
 
         void mixInto(SampleBuffer&);
 
+
+        void drawWaveform(unsigned, bool);
+
     private:
         unsigned start;
         vector<float> samples;

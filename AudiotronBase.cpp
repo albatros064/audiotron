@@ -1,6 +1,8 @@
 #include "AudiotronBase.h"
 
+#define  _USE_MATH_DEFINES
 #include <cmath>
+#include <iostream>
 
 namespace Audiotron {
 
@@ -86,6 +88,20 @@ namespace Audiotron {
         // Do nothing for now...
     }
 
+    void SampleBuffer::drawWaveform(unsigned width, bool normalize = false) {
+        if (normalize) {
+            this->normalize();
+        }
+        
+        for (unsigned i = 0; i < getLength(); ++i) {
+            int spaces = (samples[i] + 1.0) * width;
+            for (int i = 0; i < spaces; ++i) {
+                std::cout << " ";
+            }
+            std::cout << "o" << std::endl;
+        }
+        std::cout << std::endl;
+    }
 
 } // namespace Audiotron
 
